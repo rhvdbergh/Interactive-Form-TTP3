@@ -31,4 +31,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
+    // only display the color option if a selection is made in design drop down menu
+    // hide the color selection area on page load
+    $('#colors-js-puns').hide();
+    // add an event handler on the design menu
+    $('#design').on('change', (event) => {
+        const option = event.target;
+
+        if (option.value === "js puns") {
+            $('#colors-js-puns').show();
+
+        } else if (option.value === "heart js") {
+            $('#colors-js-puns').show();
+
+        } else { // else hide the color options again!
+            $('#colors-js-puns').hide();
+        }
+
+    });
+
 });
