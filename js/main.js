@@ -107,12 +107,107 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return parseInt(str);
     }
 
+    // Pseudocode for checking if activities overlap
+    // create array for each day 
+    // retrieve day for each activity
+    // retrieve time, convert to military time for easy calculation
+    // to check activities against each other, run from start hour to end hour 
+    // for both with two loops, if there are any matches, there is overlap
+
+    let activityCheckboxes = $('.activities label');
+    let activityTimes = []; // array to store the day, start time and end time of the event
+
+    // checks to see if a string contains a specific day
+    function containsDay(str, day) {
+        if (str.includes(day)) {
+            return true;
+        } else return false;
+    }
+
+
+    // if no day is indicated, returns 0
+    for (let i = 0; i < activityCheckboxes.length; i++) {
+
+        let labelText = activityCheckboxes[i].textContent;
+
+        // assign days to first position of nested array
+        if (containsDay(labelText, "Tuesday")) {
+            activityTimes[i] = [];
+            activityTimes[i][0] = "Tuesday";
+        } else if (containsDay(labelText, "Wednesday")) {
+            activityTimes[i] = [];
+            activityTimes[i][0] = "Wednesday";
+
+        } else { // no day found, so return 0
+            activityTimes[i] = [];
+            activityTimes[i][0] = 0;
+        }
+
+        // assign start and end times to second and third position of nested array
+        // the following regular expression checks for any one or two digits followed by am or pm
+        let regExpTime = /([0-9]|[1-9][0-9])[ap]m/;
+        let indexOfStartTime = labelText.search(regExpTime);
+        let startOfStr = labelText.substring(indexOfStartTime);
+        let indexOfComma = startOfStr.indexOf(',');
+        let timeStr = startOfStr.substring(0, indexOfComma);
+        // at this point, we have a string with a specific format, e.g. 9am-12pm
+        // we know the first index of the string contains a number, but we need to check
+        // if it maybe contains 2 numbers, retrieve the number, then delete either am or pm
+        regExpTime = /[ap]m/; // to determine the index of the first am or pm
+        let indexAmOrPm = timeStr.search(regExpTime);
+        let firstTime = parseInt(timeStr.substring(0, indexAmOrPm));
+        if (timeStr[indexAmOrPm] === 'a' || timeStr[indexAmOrPm] === 'A') { // the time must be am
+            if (firstTime === 12) {
+                firstTime === 0; // for the sake of calculation, 12am will be 0:00 o'clock
+            } // any other number than 12 does not need to be converted
+        } else { // the time must be pm
+            if (firstTime !== 12) {
+                firstTime += 12; // convert to military time
+            } // 12pm does not need to be converted to military time, for the sake of calculation
+        }
+        // now, find the number after the -
+        let numStart = timeStr.indexOf('-') + 1; // the next time follows a dash
+        regExpTime = /[ap]m$/;
+        indexAmOrPm = timeStr.search(regExpTime);
+        let secondTime = parseInt(timeStr.substring(numStart, indexAmOrPm));
+
+        if (timeStr[indexAmOrPm] === 'a' || timeStr[indexAmOrPm] === 'A') { // the time must be am
+            if (secondTime === 12) {
+                secondTime === 0; // for the sake of calculation, 12am will be 0:00 o'clock
+            } // any other number than 12 does not need to be converted
+        } else { // the time must be pm
+            if (secondTime !== 12) {
+                secondTime += 12; // convert to military time
+            } // 12pm does not need to be converted to military time, for the sake of calculation
+        }
+
+        if (indexOfStartTime > 0) { // a time was actually returned, otherwise index would be -1
+
+            activityTimes[i][1] = firstTime;
+            activityTimes[i][2] = secondTime;
+
+        }
+
+    }
+
+
+
+
+    // for (let i = 0; i < activityTimes.length; i++) {
+    //     console.log(activityTimes[i][0]);
+    // }
+
+
+
+
     // add an event handler on the checkboxes in the activities fieldset
     $('.activities').on('change', (event) => {
         checkbox = event.target;
         confCost += getAmount(checkbox.parentNode);
         displayTotal(confCost);
     });
+
+
 
     // $checks = $('.activities label');
     // getAmount($checks[3]);
