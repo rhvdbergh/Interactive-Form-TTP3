@@ -89,7 +89,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // display the total cost after the "activities" fieldset
     function displayTotal(total) {
-        let htmlString = '<p>Total: $' + total + '</p>';
+        if ($('.total_cost')) { $('.total_cost').remove(); }
+        let htmlString = '<p class="total_cost">Total: $' + total + '</p>';
         $('.activities').append(htmlString);
     }
 
@@ -100,16 +101,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function getAmount(checkboxLabel) {
         let str = checkboxLabel.textContent;
         const index = str.indexOf('$') + 1; // start after the $ sign
-        str = str.substring(index, str.length - 1);
+        str = str.substring(index, str.length);
 
         // return as a number, so we can do calculations with the result
         return parseInt(str);
     }
 
+    // add an event handler on the checkboxes in the activities fieldset
+    $('.activities').on('change', (event) => {
+        checkbox = event.target;
+        confCost += getAmount(checkbox.parentNode);
+        displayTotal(confCost);
+    });
+
     // $checks = $('.activities label');
     // getAmount($checks[3]);
-
-    displayTotal(confCost);
-
-
 });
