@@ -203,7 +203,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // add an event handler on the checkboxes in the activities fieldset
     $('.activities').on('change', (event) => {
         checkbox = event.target;
-        confCost += getAmount(checkbox.parentNode);
+        if (checkbox.checked) {
+            confCost += getAmount(checkbox.parentNode);
+        } else {
+            confCost -= getAmount(checkbox.parentNode);
+        }
         displayTotal(confCost);
     });
 
