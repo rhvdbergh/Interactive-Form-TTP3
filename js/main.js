@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     const $colorDiv = $('#colors-js-puns');
     const $colorOptions = $('#color').children(); // reference list to the options in the color <select> box
+    let confCost = 0;
 
     // focus on the first text field, "name"
     $('#name').focus();
@@ -38,7 +39,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // hide the color selection area on page load
     $colorDiv.hide();
 
-
     // change all the options in the color div <select> box to include class attributes
     // and remove the extra text in brackets from the content
     // so we can use the class attributes to show / hide the options
@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             let indexOfBracket = optionText.indexOf('(') - 1;
             optionText = optionText.substring(0, indexOfBracket);
             $(option).text(optionText);
-
         }
     }
 
@@ -86,7 +85,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
             $('.color_opt_heart').show();
             $colorDiv.show();
         }
-
     });
+
+    // display the total cost after the "activities" fieldset
+    function displayTotal(total) {
+        let htmlString = '<p>Total: $' + total + '</p>';
+        $('.activities').append(htmlString);
+    }
+
+    // retrieve the amount for an activity by returning the value after the $ sign in the description
+    // of the activity 
+    // this assumes that the $ amount is always the last part of the string (as is the case in 
+    // the supplied index.html)
+    function getAmount(checkboxLabel) {
+        let str = checkboxLabel.textContent;
+        const index = str.indexOf('$') + 1; // start after the $ sign
+        str = str.substring(index, str.length - 1);
+
+        // return as a number, so we can do calculations with the result
+        return parseInt(str);
+    }
+
+    // $checks = $('.activities label');
+    // getAmount($checks[3]);
+
+    displayTotal(confCost);
+
 
 });
