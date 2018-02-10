@@ -294,12 +294,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let regExp = /.+\@.+\..+/;
         return regExp.test(email);
     }
-    // validEmail($('#mail').value))
+
+    // function to check if any checkbox under activities selected
+    function checkboxSelected() {
+        for (let i = 0; i < activityCheckboxes.length; i++) {
+            let checkbox = $(activityCheckboxes[i]).find('input');
+            if (checkbox[0].checked) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // add event handler to check if form is valid, then enable submit button
     $('html').on('change', (event) => {
-        if (!($('#name').val() === "") && validEmail($('#mail').val())) // name field shouldn't be blank
-        { // email field should contain valid email
+
+        if (!($('#name').val() === "") // name field shouldn't be blank
+            &&
+            validEmail($('#mail').val()) // email field should contain valid email
+            &&
+            checkboxSelected()) { // at least one checkbox should be selected
+
             $('button[type="submit"]').prop("disabled", false);
         } else {
             $('button[type="submit"]').prop("disabled", true);
