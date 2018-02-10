@@ -306,6 +306,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return false;
     }
 
+    // checks validity of data entered for credit card
+    // will return true if credit card is not the method selected for payment
+    function creditCardValid() {
+        if ($('#payment').val() === 'credit card') {
+            // test for valid 13-16 digit number
+            let regExp = /\d{13}|\d{14}|\d{15}|\d{16}/;
+            let creditCardNumberValid = regExp.test($('#cc-num').val());
+
+            // test for valid 5 digit number
+            regExp = /\d{5}/;
+            let creditCardZipValid = regExp.test($('#zip').val());
+
+            // test for valid 3 digit number
+            regExp = /\d{3}/;
+            let creditCardCVVValid = regExp.test($('#cvv').val());
+            return (creditCardNumberValid && creditCardZipValid && creditCardCVVValid);
+        }
+        // function will return true if the payment method selected is not a credit card
+        return true;
+    }
+
     // add event handler to check if form is valid, then enable submit button
     $('html').on('change', (event) => {
 
@@ -313,7 +334,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             &&
             validEmail($('#mail').val()) // email field should contain valid email
             &&
-            checkboxSelected()) { // at least one checkbox should be selected
+            checkboxSelected() // at least one checkbox should be selected
+            &&
+            creditCardValid()) { // if credit card selected as payment, credit card numbers are valid
 
             $('button[type="submit"]').prop("disabled", false);
         } else {
