@@ -240,7 +240,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // activityTimes and activityCheckboxes
         let checkboxLabelIndex = $('.activities label').index(checkbox.parentNode);
 
-
         if (checkbox.checked) {
             confCost += getAmount(checkbox.parentNode);
 
@@ -259,6 +258,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         displayTotal(confCost);
+    });
 
+    // add event handler to payment options select box
+    $('#payment').on('change', (event) => {
+
+        let option = event.target;
+
+        if (option.value === 'credit card') {
+            $('.credit-card').show();
+            $('.bitcoin').hide();
+            $('.paypal').hide();
+        }
+
+        if (option.value === 'bitcoin') {
+            $('.credit-card').hide();
+            $('.bitcoin').show();
+            $('.paypal').hide();
+        }
+
+        if (option.value === 'paypal') {
+            $('.credit-card').hide();
+            $('.bitcoin').hide();
+            $('.paypal').show();
+        }
     });
 });
