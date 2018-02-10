@@ -63,6 +63,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
         } else return false;
     }
 
+    function toggleCheckboxValidity(checkbox) {
+        if ($(checkbox).hasClass('invalid')) {
+            $(checkbox).removeClass('invalid');
+            $(checkbox).find('input').prop('disabled', false);
+        } else {
+            $(checkbox).addClass('invalid');
+            $(checkbox).find('input').prop('disabled', true);
+        }
+    }
+
+
     // ON STARTUP
 
     // focus on the first text field, "name"
@@ -218,12 +229,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // add an event handler on the checkboxes in the activities fieldset
     $('.activities').on('change', (event) => {
-        checkbox = event.target;
+        let checkbox = event.target;
+
+        // retrieve the index of the label targeted by the event, to use with 
+        // activityTimes and activityCheckboxes
+        let checkboxLabelIndex = $('.activities label').index(checkbox.parentNode);
+
+
         if (checkbox.checked) {
             confCost += getAmount(checkbox.parentNode);
+
         } else {
             confCost -= getAmount(checkbox.parentNode);
         }
+
+        // test if any other checkboxes should be set to invalid
+        // by stepping through the checkboxes
+        for (let i = 1; i < activityTimes.length; i++) {
+            if (doesTimeOverlap(activityTimes[i], activityTimes[checkboxLabelIndex])) {
+                if (!(i === checkboxLabelIndex)) { // make sure that checkbox isn't evaluated against itself
+                    toggleCheckboxValidity(activityCheckboxes[i]);
+                }
+            }
+        }
+
         displayTotal(confCost);
+
     });
 });
