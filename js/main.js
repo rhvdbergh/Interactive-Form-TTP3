@@ -176,6 +176,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    // hide PayPal and Bitcoin options, and set default payment to credit card
+    $('.paypal').hide();
+    $('.bitcoin').hide();
+    $('#payment').val('credit card').change();
+
     // EVENT HANDLERS
 
     // add an event handler on the design menu
