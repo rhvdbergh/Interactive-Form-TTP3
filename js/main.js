@@ -74,6 +74,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
 
+
+
     // ON STARTUP
 
     // focus on the first text field, "name"
@@ -286,4 +288,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
             $('.paypal').show();
         }
     });
+
+    // function to validate email using regular expression
+    function validEmail(email) {
+        let regExp = /.+\@.+\..+/;
+        return regExp.test(email);
+    }
+    // validEmail($('#mail').value))
+
+    // add event handler to check if form is valid, then enable submit button
+    $('html').on('change', (event) => {
+        if (!($('#name').val() === "") && validEmail($('#mail').val())) // name field shouldn't be blank
+        { // email field should contain valid email
+            $('button[type="submit"]').prop("disabled", false);
+        } else {
+            $('button[type="submit"]').prop("disabled", true);
+        }
+    });
+
 });
