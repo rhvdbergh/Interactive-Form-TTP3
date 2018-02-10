@@ -181,6 +181,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     $('.bitcoin').hide();
     $('#payment').val('credit card').change();
 
+    // set submit button to invalid - changes need to be made first!
+    $('button[type="submit"]').prop("disabled", true);
+
     // EVENT HANDLERS
 
     // add an event handler on the design menu
