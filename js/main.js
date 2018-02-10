@@ -94,6 +94,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
         $('.activities').append(htmlString);
     }
 
+    // array passed in for firstTime and secondTime should consist of day, start time, end time
+    function doesTimeOverlap(firstTime, secondTime) {
+        if (firstTime[0] === secondTime[0]) { // this means the day is the same, check for overlap
+
+            for (let i = firstTime[1]; i <= firstTime[2]; i++) { // step through every hour in the first range
+                // if the second time's start time is within range, there is overlap
+                // except if the second time is starting at the last number in the range, because that means
+                // the event starts immediately after the other event - this should be allowed
+                if (i === secondTime[1] && !(secondTime[1] === firstTime[2])) {
+                    return true;
+                }
+                // as with the previous case, if the event ends at a specific time and the new event begins 
+                // immediately, this should be allowed
+                if (i === secondTime[2] && (!secondTime[2] === firstTime[1])) {
+                    return true;
+                }
+            }
+
+        }
+        return false; // as a default, return false
+    }
+
+
     // retrieve the amount for an activity by returning the value after the $ sign in the description
     // of the activity 
     // this assumes that the $ amount is always the last part of the string (as is the case in 
@@ -123,7 +146,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             return true;
         } else return false;
     }
-
 
     // if no day is indicated, returns 0
     for (let i = 0; i < activityCheckboxes.length; i++) {
@@ -189,9 +211,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
     }
-
-
-
 
     // for (let i = 0; i < activityTimes.length; i++) {
     //     console.log(activityTimes[i][0]);
