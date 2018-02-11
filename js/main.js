@@ -73,8 +73,43 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
+    // function to validate email using regular expression
+    function validEmail(email) {
+        let regExp = /.+\@.+\..+/;
+        return regExp.test(email);
+    }
 
+    // function to check if any checkbox under activities selected
+    function checkboxSelected() {
+        for (let i = 0; i < activityCheckboxes.length; i++) {
+            let checkbox = $(activityCheckboxes[i]).find('input');
+            if (checkbox[0].checked) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    // checks validity of data entered for credit card
+    // will return true if credit card is not the method selected for payment
+    function creditCardValid() {
+        if ($('#payment').val() === 'credit card') {
+            // test for valid 13-16 digit number
+            let regExp = /\d{13}|\d{14}|\d{15}|\d{16}/;
+            let creditCardNumberValid = regExp.test($('#cc-num').val());
+
+            // test for valid 5 digit number
+            regExp = /\d{5}/;
+            let creditCardZipValid = regExp.test($('#zip').val());
+
+            // test for valid 3 digit number
+            regExp = /\d{3}/;
+            let creditCardCVVValid = regExp.test($('#cvv').val());
+            return (creditCardNumberValid && creditCardZipValid && creditCardCVVValid);
+        }
+        // function will return true if the payment method selected is not a credit card
+        return true;
+    }
 
     // ON STARTUP
 
@@ -289,55 +324,34 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    // function to validate email using regular expression
-    function validEmail(email) {
-        let regExp = /.+\@.+\..+/;
-        return regExp.test(email);
-    }
+    // check to see if all entries are valid
+    function allEntriesValid() {
 
-    // function to check if any checkbox under activities selected
-    function checkboxSelected() {
-        for (let i = 0; i < activityCheckboxes.length; i++) {
-            let checkbox = $(activityCheckboxes[i]).find('input');
-            if (checkbox[0].checked) {
-                return true;
-            }
+        if ($('#name').val() === "") { // name field shouldn't be blank
+            return false;
         }
-        return false;
-    }
 
-    // checks validity of data entered for credit card
-    // will return true if credit card is not the method selected for payment
-    function creditCardValid() {
-        if ($('#payment').val() === 'credit card') {
-            // test for valid 13-16 digit number
-            let regExp = /\d{13}|\d{14}|\d{15}|\d{16}/;
-            let creditCardNumberValid = regExp.test($('#cc-num').val());
+        if (!validEmail($('#mail').val())) { //  email field should contain valid email
 
-            // test for valid 5 digit number
-            regExp = /\d{5}/;
-            let creditCardZipValid = regExp.test($('#zip').val());
-
-            // test for valid 3 digit number
-            regExp = /\d{3}/;
-            let creditCardCVVValid = regExp.test($('#cvv').val());
-            return (creditCardNumberValid && creditCardZipValid && creditCardCVVValid);
+            return false;
         }
-        // function will return true if the payment method selected is not a credit card
+
+        if (!checkboxSelected()) { // at least one checkbox should be selected
+            return false;
+        }
+
+        if (!creditCardValid()) { // if credit card selected as payment, credit card numbers are valid
+
+            return false;
+        }
+
         return true;
     }
 
     // add event handler to check if form is valid, then enable submit button
     $('html').on('change', (event) => {
 
-        if (!($('#name').val() === "") // name field shouldn't be blank
-            &&
-            validEmail($('#mail').val()) // email field should contain valid email
-            &&
-            checkboxSelected() // at least one checkbox should be selected
-            &&
-            creditCardValid()) { // if credit card selected as payment, credit card numbers are valid
-
+        if (allEntriesValid()) {
             $('button[type="submit"]').prop("disabled", false);
         } else {
             $('button[type="submit"]').prop("disabled", true);
