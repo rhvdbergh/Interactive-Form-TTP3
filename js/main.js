@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     return true;
                 }
             }
-
         }
         return false; // as a default, return false
     }
@@ -123,11 +122,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // will return true if credit card is not the method selected for payment
     function creditCardValid() {
         if ($('#payment').val() === 'credit card') {
-
             return (creditCardNumberValid() && creditCardZipValid() && creditCardCVVValid());
 
         }
         // function will return true if the payment method selected is not a credit card
+        return true;
+    }
+
+    // check to see if all entries are valid
+    function allEntriesValid() {
+
+        if ($('#name').val() === "") { // name field shouldn't be blank
+            return false;
+        }
+
+        if (!validEmail($('#mail').val())) { //  email field should contain valid email
+            return false;
+        }
+
+        if (!checkboxSelected()) { // at least one checkbox should be selected
+            return false;
+        }
+
+        if (!creditCardValid()) { // if credit card selected as payment, credit card numbers are valid
+            return false;
+        }
         return true;
     }
 
@@ -317,7 +336,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 $(textareaLabel).text('Your Job Role:');
                 option.after(textareaLabel);
                 textareaLabel.after(textarea);
-                // $(textarea).insertAfter(option);
             }
         } else { // a different option was selected, so remove the 
             //textarea box if it exists
@@ -380,30 +398,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-
-    // check to see if all entries are valid
-    function allEntriesValid() {
-
-        if ($('#name').val() === "") { // name field shouldn't be blank
-            return false;
-        }
-
-        if (!validEmail($('#mail').val())) { //  email field should contain valid email
-            return false;
-        }
-
-        if (!checkboxSelected()) { // at least one checkbox should be selected
-            return false;
-        }
-
-        if (!creditCardValid()) { // if credit card selected as payment, credit card numbers are valid
-
-            return false;
-        }
-
-        return true;
-    }
-
     // add event handler to do real time email validation
     $('#mail').on('input', (event) => {
         if (!validEmail($('#mail').val())) {
@@ -448,68 +442,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-
-
     $('form').on('submit', (event) => {
         if (!allEntriesValid()) {
             event.preventDefault();
         } else {
             console.log('submit');
-
         }
-
     });
-
-
-
 });
-
-
-// OLD CODE
-
-
-// function showInvalidEntries() {
-
-//     if ($('#name').val() === "") { // name field shouldn't be blank
-//         if ($('.validation_warning').length > 0) { // a validation warning has been given
-//             $('#name').addClass('warning');
-//             let warning = document.createElement("label");
-//             $(warning).textContent = "Please enter a name";
-//             $(warning).after('#name');
-//         }
-//     }
-
-//     if (!validEmail($('#mail').val())) { //  email field should contain valid email
-//         if ($('.validation_warning').length > 0) { // a validation warning has been given
-//             $('#mail').addClass('warning');
-//         }
-//     }
-
-//     if (!checkboxSelected()) { // at least one checkbox should be selected
-//         if ($('.validation_warning').length > 0) { // a validation warning has been given
-//             $('.activities label').addClass('warning');
-//         }
-//     }
-
-//     if (!creditCardValid()) { // if credit card selected as payment, credit card numbers are valid
-//         if ($('.validation_warning').length > 0) { // a validation warning has been given
-//             $('#credit-card').addClass('warning');
-//         }
-//     }
-
-// }
-
-// add event handler to provide error message on submit button if there is
-// // a validation problem
-// $('.submit_btn_div').on('mouseover', (event) => {
-//     if ($('button[type="submit"]').prop("disabled") === true) {
-//         if (!($('.validation_warning').length > 0)) { // only create warning if warning does not already exist
-//             let validationWarning = document.createElement('p');
-//             $(validationWarning).css('color: red');
-//             $(validationWarning).addClass('validation_warning');
-//             validationWarning.textContent = "Please fix errors indicated in red above before submitting!";
-//             $('.submit_btn_div').after(validationWarning);
-//             showInvalidEntries();
-//         }
-//     }
-// });
