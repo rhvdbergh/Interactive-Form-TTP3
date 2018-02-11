@@ -90,22 +90,38 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return false;
     }
 
+    function creditCardNumberValid() {
+        // test for valid 13-16 digit number
+        let regExp = /\d{13}|\d{14}|\d{15}|\d{16}/;
+        let creditCardNumberValid = regExp.test($('#cc-num').val());
+        if ($('#cc-num').val().length > 16) { // there's more than 16 characters in the box!
+            creditCardNumberValid = false;
+        }
+
+        return creditCardNumberValid;
+    }
+
+    function creditCardZipValid() {
+        // test for valid 5 digit number
+        regExp = /\d{5}/;
+        let creditCardZipValid = regExp.test($('#zip').val());
+        return creditCardZipValid;
+    }
+
+    function creditCardCVVValid() {
+        // test for valid 3 digit number
+        regExp = /\d{3}/;
+        let creditCardCVVValid = regExp.test($('#cvv').val());
+        return creditCardCVVValid;
+
+    }
     // checks validity of data entered for credit card
     // will return true if credit card is not the method selected for payment
     function creditCardValid() {
         if ($('#payment').val() === 'credit card') {
-            // test for valid 13-16 digit number
-            let regExp = /\d{13}|\d{14}|\d{15}|\d{16}/;
-            let creditCardNumberValid = regExp.test($('#cc-num').val());
 
-            // test for valid 5 digit number
-            regExp = /\d{5}/;
-            let creditCardZipValid = regExp.test($('#zip').val());
+            return (creditCardNumberValid() && creditCardZipValid() && creditCardCVVValid());
 
-            // test for valid 3 digit number
-            regExp = /\d{3}/;
-            let creditCardCVVValid = regExp.test($('#cvv').val());
-            return (creditCardNumberValid && creditCardZipValid && creditCardCVVValid);
         }
         // function will return true if the payment method selected is not a credit card
         return true;
@@ -122,6 +138,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
     $(emailWarning).text("Please enter a valid email address.");
     $(emailWarning).insertBefore($('#mail'));
     $(emailWarning).hide();
+
+    // set a warning message for invalid credit card number in a new label, but hide message
+    let ccNumWarning = document.createElement('label');
+    $(ccNumWarning).addClass('cc_num_invalid_warning warning');
+    $(ccNumWarning).text("Please enter 13-16 digits.");
+    $(ccNumWarning).insertAfter($('#cc-num').parent().next().next());
+    $(ccNumWarning).hide();
+
+    // set a warning message for invalid credit card number in a new label, but hide message
+    let ccZipWarning = document.createElement('label');
+    $(ccZipWarning).addClass('cc_zip_invalid_warning warning');
+    $(ccZipWarning).text("Please enter 5 digits.");
+    $(ccZipWarning).insertAfter($('#zip'));
+    $(ccZipWarning).hide();
+
+    // set a warning message for invalid credit card number in a new label, but hide message
+    let ccCVVWarning = document.createElement('label');
+    $(ccCVVWarning).addClass('cc_cvv_invalid_warning warning');
+    $(ccCVVWarning).text("Please enter 3 digits.");
+    $(ccCVVWarning).insertAfter($('#cvv'));
+    $(ccCVVWarning).hide();
 
     // only display the color option if a selection is made in design drop down menu
     // hide the color selection area on page load
@@ -226,7 +263,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     $('#payment').val('credit card').change();
 
     // set submit button to invalid - changes need to be made first!
-    $('button[type="submit"]').prop("disabled", true);
+    // $('button[type="submit"]').prop("disabled", true);
     // wrap a div around the button to listen for mouseover events
     $('button[type="submit"]').wrap('<div class="submit_btn_div"></div>');
 
@@ -368,15 +405,52 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    // add event handler to check if form is valid, then enable submit button
-    $('html').on('change', (event) => {
+    // add event handler to do real time credit card number validation
+    $('#cc-num').on('input', (event) => {
+        if (!creditCardNumberValid()) {
 
-        if (allEntriesValid()) {
-            $('button[type="submit"]').prop("disabled", false);
+            $('.cc_num_invalid_warning').show();
+
         } else {
-            $('button[type="submit"]').prop("disabled", true);
+            $('.cc_num_invalid_warning').hide();
         }
     });
+
+    // add event handler to do real time credit card zip number validation
+    $('#zip').on('input', (event) => {
+        if (!creditCardZipValid()) {
+
+            $('.cc_zip_invalid_warning').show();
+
+        } else {
+            $('.cc_zip_invalid_warning').hide();
+        }
+    });
+
+    // add event handler to do real time credit card cvv number validation
+    $('#cvv').on('input', (event) => {
+        if (!creditCardCVVValid()) {
+
+            $('.cc_cvv_invalid_warning').show();
+
+        } else {
+            $('.cc_cvv_invalid_warning').hide();
+        }
+    });
+
+
+
+    $('form').on('submit', (event) => {
+        if (!allEntriesValid()) {
+            event.preventDefault();
+        } else {
+            console.log('submit');
+
+        }
+
+    });
+
+
 
 });
 
