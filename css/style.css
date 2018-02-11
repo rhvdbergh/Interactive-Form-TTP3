@@ -124,6 +124,11 @@ button:disabled {
     cursor: default;
 }
 
+.warning,
+.warning:focus {
+    color: tomato;
+}
+
 
 /* ================================= 
   Page Styles

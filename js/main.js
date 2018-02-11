@@ -116,6 +116,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // focus on the first text field, "name"
     $('#name').focus();
 
+    // set a warning message for invalid email in a new label, but hide message
+    let emailWarning = document.createElement('label');
+    $(emailWarning).addClass('email_invalid_warning warning');
+    $(emailWarning).text("Please enter a valid email address.");
+    $(emailWarning).insertBefore($('#mail'));
+    $(emailWarning).hide();
+
     // only display the color option if a selection is made in design drop down menu
     // hide the color selection area on page load
     $colorDiv.hide();
@@ -220,6 +227,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // set submit button to invalid - changes need to be made first!
     $('button[type="submit"]').prop("disabled", true);
+    // wrap a div around the button to listen for mouseover events
+    $('button[type="submit"]').wrap('<div class="submit_btn_div"></div>');
 
     // EVENT HANDLERS
 
@@ -324,6 +333,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
+
     // check to see if all entries are valid
     function allEntriesValid() {
 
@@ -332,7 +342,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         if (!validEmail($('#mail').val())) { //  email field should contain valid email
-
             return false;
         }
 
@@ -348,6 +357,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return true;
     }
 
+    // add event handler to do real time email validation
+    $('#mail').on('input', (event) => {
+        if (!validEmail($('#mail').val())) {
+
+            $('.email_invalid_warning').show();
+
+        } else {
+            $('.email_invalid_warning').hide();
+        }
+    });
+
     // add event handler to check if form is valid, then enable submit button
     $('html').on('change', (event) => {
 
@@ -359,3 +379,53 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
 });
+
+
+// OLD CODE
+
+
+// function showInvalidEntries() {
+
+//     if ($('#name').val() === "") { // name field shouldn't be blank
+//         if ($('.validation_warning').length > 0) { // a validation warning has been given
+//             $('#name').addClass('warning');
+//             let warning = document.createElement("label");
+//             $(warning).textContent = "Please enter a name";
+//             $(warning).after('#name');
+//         }
+//     }
+
+//     if (!validEmail($('#mail').val())) { //  email field should contain valid email
+//         if ($('.validation_warning').length > 0) { // a validation warning has been given
+//             $('#mail').addClass('warning');
+//         }
+//     }
+
+//     if (!checkboxSelected()) { // at least one checkbox should be selected
+//         if ($('.validation_warning').length > 0) { // a validation warning has been given
+//             $('.activities label').addClass('warning');
+//         }
+//     }
+
+//     if (!creditCardValid()) { // if credit card selected as payment, credit card numbers are valid
+//         if ($('.validation_warning').length > 0) { // a validation warning has been given
+//             $('#credit-card').addClass('warning');
+//         }
+//     }
+
+// }
+
+// add event handler to provide error message on submit button if there is
+// // a validation problem
+// $('.submit_btn_div').on('mouseover', (event) => {
+//     if ($('button[type="submit"]').prop("disabled") === true) {
+//         if (!($('.validation_warning').length > 0)) { // only create warning if warning does not already exist
+//             let validationWarning = document.createElement('p');
+//             $(validationWarning).css('color: red');
+//             $(validationWarning).addClass('validation_warning');
+//             validationWarning.textContent = "Please fix errors indicated in red above before submitting!";
+//             $('.submit_btn_div').after(validationWarning);
+//             showInvalidEntries();
+//         }
+//     }
+// });
