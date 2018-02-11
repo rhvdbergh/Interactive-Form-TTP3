@@ -118,7 +118,7 @@ button:hover {
     background: #184c62;
 }
 
-` button:disabled {
+button:disabled {
     color: #184c62;
     background-color: #679cb3;
     cursor: default;
@@ -127,6 +127,12 @@ button:hover {
 .warning,
 .warning:focus {
     color: tomato;
+    font-size: 0.9em;
+}
+
+.block {
+    display: block;
+    clear: both;
 }
 
 

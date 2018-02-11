@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if ($('#cc-num').val().length > 16) { // there's more than 16 characters in the box!
             creditCardNumberValid = false;
         }
-
         return creditCardNumberValid;
     }
 
@@ -105,6 +104,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // test for valid 5 digit number
         regExp = /\d{5}/;
         let creditCardZipValid = regExp.test($('#zip').val());
+        if ($('#zip').val().length > 5) { // there's more than 5 characters in the box!
+            creditCardZipValid = false;
+        }
         return creditCardZipValid;
     }
 
@@ -112,8 +114,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // test for valid 3 digit number
         regExp = /\d{3}/;
         let creditCardCVVValid = regExp.test($('#cvv').val());
+        if ($('#cvv').val().length > 3) { // there's more than 16 characters in the box!
+            creditCardCVVValid = false;
+        }
         return creditCardCVVValid;
-
     }
     // checks validity of data entered for credit card
     // will return true if credit card is not the method selected for payment
@@ -142,21 +146,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // set a warning message for invalid credit card number in a new label, but hide message
     let ccNumWarning = document.createElement('label');
     $(ccNumWarning).addClass('cc_num_invalid_warning warning');
-    $(ccNumWarning).text("Please enter 13-16 digits.");
-    $(ccNumWarning).insertAfter($('#cc-num').parent().next().next());
+    $(ccNumWarning).text("Card Number: Please enter 13-16 digits.");
+    $(ccNumWarning).insertAfter($('#cc-num'));
     $(ccNumWarning).hide();
 
     // set a warning message for invalid credit card number in a new label, but hide message
     let ccZipWarning = document.createElement('label');
     $(ccZipWarning).addClass('cc_zip_invalid_warning warning');
-    $(ccZipWarning).text("Please enter 5 digits.");
+    $(ccZipWarning).text("Please enter exactly 5 digits for zip.");
     $(ccZipWarning).insertAfter($('#zip'));
     $(ccZipWarning).hide();
 
     // set a warning message for invalid credit card number in a new label, but hide message
     let ccCVVWarning = document.createElement('label');
     $(ccCVVWarning).addClass('cc_cvv_invalid_warning warning');
-    $(ccCVVWarning).text("Please enter 3 digits.");
+    $(ccCVVWarning).text("Please enter exactly 3 digits for CVV.");
     $(ccCVVWarning).insertAfter($('#cvv'));
     $(ccCVVWarning).hide();
 
