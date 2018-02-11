@@ -309,9 +309,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (option.value === "other") {
             // if the textarea box already exists, do nothing
             if (!(document.getElementById('other-title'))) {
-                let textarea = document.createElement('textarea')
+                let textarea = document.createElement('textarea');
+                let textareaLabel = document.createElement('label');
                 $(textarea).attr('id', 'other-title').attr('name', 'user_other_title');
-                option.after(textarea);
+                $(textarea).attr('placeholder', 'Your Job Role');
+                $(textareaLabel).attr('id', 'other-title-label').attr('for', '#other-title');
+                $(textareaLabel).text('Your Job Role:');
+                option.after(textareaLabel);
+                textareaLabel.after(textarea);
+                // $(textarea).insertAfter(option);
             }
         } else { // a different option was selected, so remove the 
             //textarea box if it exists
