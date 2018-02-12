@@ -11,6 +11,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let activityCheckboxes = $('.activities label');
     let activityTimes = []; // array to store the day, start time and end time of the event
 
+    // create warning messages and tie them to elements in the DOM
+    // but hide them to start out with
+    function createMessage(element, elementClass, text, beforeOrAfter, anchor) {
+        let msg = document.createElement(element);
+        let cls = elementClass + " warning";
+        $(msg).addClass(cls);
+        $(msg).text(text);
+        if (beforeOrAfter.toLowerCase() === 'before') {
+            $(msg).insertBefore($(anchor));
+        } else {
+            $(msg).insertAfter($(anchor));
+        }
+        $(msg).hide();
+    }
 
     // display the total cost after the "activities" fieldset
     function displayTotal(total) {
@@ -205,81 +219,48 @@ document.addEventListener('DOMContentLoaded', (event) => {
     $('#name').focus();
 
     // set a warning message for empty name in a new label, but hide message    
-    let nameWarning = document.createElement('label');
-    $(nameWarning).addClass('name_empty_warning warning');
-    $(nameWarning).text("Name field empty! Please enter a valid name.");
-    $(nameWarning).insertBefore($('#name'));
-    $(nameWarning).hide();
+    const nameWarning = createMessage('label', 'name_empty_warning',
+        "Name field empty! Please enter a valid name.", 'before', '#name');
 
     // set a warning message for invalid email in a new label, but hide message
-    let emailWarning = document.createElement('label');
-    $(emailWarning).addClass('email_invalid_warning warning');
-    $(emailWarning).text("Please enter a valid email address.");
-    $(emailWarning).insertBefore($('#mail'));
-    $(emailWarning).hide();
+    const emailWarning = createMessage('label', 'email_invalid_warning',
+        "Please enter a valid email address.", 'before', '#mail');
 
     // set a warning message for empty email in a new label, but hide message
-    let mailEmptyWarning = document.createElement('label');
-    $(mailEmptyWarning).addClass('mail_empty_warning warning');
-    $(mailEmptyWarning).text("Email field empty! Please enter a valid email address.");
-    $(mailEmptyWarning).insertBefore($(emailWarning));
-    $(mailEmptyWarning).hide();
+    const mailEmptyWarning = createMessage('label', 'mail_empty_warning',
+        "Email field empty! Please enter a valid email address.", 'before', '.email_invalid_warning');
 
     // set a warning message for empty activities checkboxes in a new label, but hide message
-    let noActivitiesSelectedWarning = document.createElement('p');
-    $(noActivitiesSelectedWarning).addClass('no_activities_selected_warning warning');
-    $(noActivitiesSelectedWarning).text("Please select at least one activity.");
-    $(noActivitiesSelectedWarning).insertAfter($('.activities'));
-    $(noActivitiesSelectedWarning).hide();
+    const noActivitiesSelectedWarning = createMessage('p', 'no_activities_selected_warning',
+        "Please select at least one activity.", 'after', '.activities');
 
     // set a warning message for invalid credit card number in a new label, but hide message
-    let ccNumWarning = document.createElement('label');
-    $(ccNumWarning).addClass('cc_num_invalid_warning warning');
-    $(ccNumWarning).text("Card Number: Please enter 13-16 digits.");
-    $(ccNumWarning).insertAfter($('#cc-num'));
-    $(ccNumWarning).hide();
+    const ccNumWarning = createMessage('label', 'cc_num_invalid_warning',
+        "Card Number: Please enter 13-16 digits.", 'after', '#cc-num');
 
     // set a warning message for empty credit card number in a new label, but hide message
-    let ccNumEmptyWarning = document.createElement('label');
-    $(ccNumEmptyWarning).addClass('cc_num_empty_warning warning');
-    $(ccNumEmptyWarning).text("Please enter credit card number.");
-    $(ccNumEmptyWarning).insertAfter($('#cc-num'));
-    $(ccNumEmptyWarning).hide();
+    const ccNumEmptyWarning = createMessage('label', 'cc_num_empty_warning',
+        "Please enter credit card number.", 'after', '#cc-num');
 
     // set a warning message for invalid credit card zip in a new label, but hide message
-    let ccZipWarning = document.createElement('label');
-    $(ccZipWarning).addClass('cc_zip_invalid_warning warning');
-    $(ccZipWarning).text("Please enter exactly 5 digits for zip.");
-    $(ccZipWarning).insertAfter($('#zip'));
-    $(ccZipWarning).hide();
+    const ccZipWarning = createMessage('label', 'cc_zip_invalid_warning',
+        "Please enter exactly 5 digits for zip.", 'after', '#zip');
 
     // set a warning message for empty credit card zip in a new label, but hide message    
-    let ccZipEmptyWarning = document.createElement('label');
-    $(ccZipEmptyWarning).addClass('cc_zip_empty_warning warning');
-    $(ccZipEmptyWarning).text("Please enter card zip code.");
-    $(ccZipEmptyWarning).insertAfter($('#zip'));
-    $(ccZipEmptyWarning).hide();
+    const ccZipEmptyWarning = createMessage('label', 'cc_zip_empty_warning',
+        "Please enter card zip code.", 'after', '#zip');
 
     // set a warning message for invalid credit card cvv in a new label, but hide message
-    let ccCVVWarning = document.createElement('label');
-    $(ccCVVWarning).addClass('cc_cvv_invalid_warning warning');
-    $(ccCVVWarning).text("Please enter exactly 3 digits for CVV.");
-    $(ccCVVWarning).insertAfter($('#cvv'));
-    $(ccCVVWarning).hide();
+    const ccCVVWarning = createMessage('label', 'cc_cvv_invalid_warning',
+        "Please enter exactly 3 digits for CVV.", 'after', '#cvv');
 
     // set a warning message for empty credit card cvv in a new label, but hide message    
-    let ccCVVEmptyWarning = document.createElement('label');
-    $(ccCVVEmptyWarning).addClass('cc_cvv_empty_warning warning');
-    $(ccCVVEmptyWarning).text("Please enter card CVV code.");
-    $(ccCVVEmptyWarning).insertAfter($('#cvv'));
-    $(ccCVVEmptyWarning).hide();
+    const ccCVVEmptyWarning = createMessage('label', 'cc_cvv_empty_warning',
+        "Please enter card CVV code.", 'after', '#cvv');
 
     // set a warning message for errors on submit button in a new label, but hide message        
-    let invalidWarning = document.createElement('label');
-    $(invalidWarning).addClass('invalid_warning warning');
-    $(invalidWarning).text("Please correct the errors above (indicated in red).");
-    $(invalidWarning).insertAfter($('button[type="submit"]'));
-    $(invalidWarning).hide();
+    const invalidWarning = createMessage('label', 'invalid_warning',
+        "Please correct the errors above (indicated in red).", 'after', 'button[type="submit"]');
 
     // only display the color option if a selection is made in design drop down menu
     // hide the color selection area on page load
