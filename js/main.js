@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    // function to validate email using regular expression
+    // function to validate basic email layout using regular expression
     function validEmail(email) {
         let regExp = /.+\@.+\..+/;
         return regExp.test(email);
@@ -150,7 +150,79 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return true;
     }
 
+    // displays all invalid fields with appropriate messages
+    // only EMPTY fields need to create new messages, since any name is acceptable
+    // email validation is done realtime
+    // if only one activities checkbox is ticked, it is valid
+    // credit card validation is real-time
+    // the email and credit card fields display different messages when empty and when not valid
+    function displayInvalidFields() {
+        if ($('#name').val() === "") { // name field shouldn't be blank
+            // check to see if the label is already presented. If so, don't add again!
+            if (!($('.name_empty_warning').is(':visible'))) {
+                let nameWarning = document.createElement('label');
+                $(nameWarning).addClass('name_empty_warning warning');
+                $(nameWarning).text("Name field empty! Please enter a valid name.");
+                $(nameWarning).insertBefore($('#name'));
+                $(nameWarning).show();
+            }
+        } else { $('.name_empty_warning').hide(); } // problem resolved, remove message
+
+        if ($('#mail').val() === "") { //  email field shouldn't be blank
+            if (!($('.mail_empty_warning').is(':visible'))) {
+                let mailEmptyWarning = document.createElement('label');
+                $(mailEmptyWarning).addClass('mail_empty_warning warning');
+                $(mailEmptyWarning).text("Email field empty! Please enter a valid email address.");
+                $(mailEmptyWarning).insertBefore($('#mail'));
+                $(mailEmptyWarning).show();
+            }
+        } else { $('.mail_empty_warning').hide(); }
+
+        if (!checkboxSelected()) { // at least one checkbox should be selected
+            if (!($('.no_activities_selected_warning').is(':visible'))) {
+                let noActivitiesSelectedWarning = document.createElement('label');
+                $(noActivitiesSelectedWarning).addClass('no_activities_selected_warning warning');
+                $(noActivitiesSelectedWarning).text("Please select at least one activity.");
+                $(noActivitiesSelectedWarning).insertBefore($('input[name="all"]'));
+                $(noActivitiesSelectedWarning).show();
+            }
+        } else { $('.no_activities_selected_warning').hide(); }
+
+        if ($('#cc-num').val() === "") { // credit card numbers should be added
+            if (!($('.cc_num_empty_warning').is(':visible'))) {
+                let ccNumWarning = document.createElement('label');
+                $(ccNumWarning).addClass('cc_num_empty_warning warning');
+                $(ccNumWarning).text("Please enter credit card number.");
+                $(ccNumWarning).insertAfter($('#cc-num'));
+                $(ccNumWarning).show();
+            }
+        } else { $('.cc_num_empty_warning').hide(); }
+
+        if ($('#zip').val() === "") { // credit card zip should not be blank
+            if (!($('.cc_zip_empty_warning').is(':visible'))) {
+                let ccZipEmptyWarning = document.createElement('label');
+                $(ccZipEmptyWarning).addClass('cc_zip_empty_warning warning');
+                $(ccZipEmptyWarning).text("Please enter card zip code.");
+                $(ccZipEmptyWarning).insertAfter($('#zip'));
+                $(ccZipEmptyWarning).show();
+            }
+        } else { $('.cc_zip_empty_warning').hide(); }
+
+        if ($('#cvv').val() === "") { // credit card CVV should not be blank
+            if (!($('.cc_cvv_empty_warning').is(':visible'))) {
+                let ccCVVEmptyWarning = document.createElement('label');
+                $(ccCVVEmptyWarning).addClass('cc_cvv_empty_warning warning');
+                $(ccCVVEmptyWarning).text("Please enter card CVV code.");
+                $(ccCVVEmptyWarning).insertAfter($('#cvv'));
+                $(ccCVVEmptyWarning).show();
+            }
+        } else { $('.cc_cvv_empty_warning').hide(); }
+    }
+
     // ON STARTUP
+
+    // turn off HTML5 validation (so the validation is done with JavaScript)
+    $('form').attr('novalidate', true);
 
     // focus on the first text field, "name"
     $('#name').focus();
@@ -434,19 +506,44 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // add event handler to do real time credit card cvv number validation
     $('#cvv').on('input', (event) => {
         if (!creditCardCVVValid()) {
-
             $('.cc_cvv_invalid_warning').show();
-
         } else {
             $('.cc_cvv_invalid_warning').hide();
         }
     });
 
+    // add event handler on submission button to validate
+    // will not submit unless all necessary fields have been filled in correctly
     $('form').on('submit', (event) => {
         if (!allEntriesValid()) {
             event.preventDefault();
-        } else {
-            console.log('submit');
+            displayInvalidFields();
+            // only add the invalid warning if it isn't visible already
+            if (!($('.invalid_warning').is(':visible'))) {
+                let invalidWarning = document.createElement('label');
+                $(invalidWarning).addClass('invalid_warning warning');
+                $(invalidWarning).text("Please correct the errors above (indicated in red).");
+                $(invalidWarning).insertAfter($('button[type="submit"]'));
+                $(invalidWarning).show();
+            }
+        }
+    });
+
+    // add an event handler to check, when there is a change in the document, whether error messages
+    // should be removed
+    $('html').on('input click', (event) => {
+
+        // if the submit button has been clicked once and validation failed,
+        // remove the validation warnings as they are corrected
+        // by updating the display of the invalid fields
+        if ($('.invalid_warning').is(':visible')) {
+            displayInvalidFields();
+        }
+
+        // warning message below submit button disappears if all required fields 
+        // are valid
+        if (allEntriesValid()) {
+            $('.invalid_warning').hide();
         }
     });
 });
