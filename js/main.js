@@ -274,6 +274,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     $(ccCVVEmptyWarning).insertAfter($('#cvv'));
     $(ccCVVEmptyWarning).hide();
 
+    // set a warning message for errors on submit button in a new label, but hide message        
+    let invalidWarning = document.createElement('label');
+    $(invalidWarning).addClass('invalid_warning warning');
+    $(invalidWarning).text("Please correct the errors above (indicated in red).");
+    $(invalidWarning).insertAfter($('button[type="submit"]'));
+    $(invalidWarning).hide();
+
     // only display the color option if a selection is made in design drop down menu
     // hide the color selection area on page load
     $colorDiv.hide();
@@ -536,14 +543,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (!allEntriesValid()) {
             event.preventDefault();
             displayInvalidFields();
-            // only add the invalid warning if it isn't visible already
-            if (!($('.invalid_warning').is(':visible'))) {
-                let invalidWarning = document.createElement('label');
-                $(invalidWarning).addClass('invalid_warning warning');
-                $(invalidWarning).text("Please correct the errors above (indicated in red).");
-                $(invalidWarning).insertAfter($('button[type="submit"]'));
-                $(invalidWarning).show();
-            }
+            $('.invalid_warning').show();
         }
     });
 
