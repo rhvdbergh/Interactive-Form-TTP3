@@ -160,63 +160,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if ($('#name').val() === "") { // name field shouldn't be blank
             // check to see if the label is already presented. If so, don't add again!
             if (!($('.name_empty_warning').is(':visible'))) {
-                let nameWarning = document.createElement('label');
-                $(nameWarning).addClass('name_empty_warning warning');
-                $(nameWarning).text("Name field empty! Please enter a valid name.");
-                $(nameWarning).insertBefore($('#name'));
-                $(nameWarning).show();
+                $('.name_empty_warning').show();
             }
         } else { $('.name_empty_warning').hide(); } // problem resolved, remove message
 
         if ($('#mail').val() === "") { //  email field shouldn't be blank
             if (!($('.mail_empty_warning').is(':visible'))) {
-                let mailEmptyWarning = document.createElement('label');
-                $(mailEmptyWarning).addClass('mail_empty_warning warning');
-                $(mailEmptyWarning).text("Email field empty! Please enter a valid email address.");
-                $(mailEmptyWarning).insertBefore($('#mail'));
-                $(mailEmptyWarning).show();
+                $('.mail_empty_warning').show();
             }
         } else { $('.mail_empty_warning').hide(); }
 
         if (!checkboxSelected()) { // at least one checkbox should be selected
             if (!($('.no_activities_selected_warning').is(':visible'))) {
-                let noActivitiesSelectedWarning = document.createElement('label');
-                $(noActivitiesSelectedWarning).addClass('no_activities_selected_warning warning');
-                $(noActivitiesSelectedWarning).text("Please select at least one activity.");
-                $(noActivitiesSelectedWarning).insertBefore($('input[name="all"]'));
-                $(noActivitiesSelectedWarning).show();
+                $('.no_activities_selected_warning').show();
             }
         } else { $('.no_activities_selected_warning').hide(); }
 
         if ($('#cc-num').val() === "") { // credit card numbers should be added
             if (!($('.cc_num_empty_warning').is(':visible'))) {
-                let ccNumWarning = document.createElement('label');
-                $(ccNumWarning).addClass('cc_num_empty_warning warning');
-                $(ccNumWarning).text("Please enter credit card number.");
-                $(ccNumWarning).insertAfter($('#cc-num'));
-                $(ccNumWarning).show();
+                $('.cc_num_empty_warning').show();
             }
         } else { $('.cc_num_empty_warning').hide(); }
 
         if ($('#zip').val() === "") { // credit card zip should not be blank
             if (!($('.cc_zip_empty_warning').is(':visible'))) {
-                let ccZipEmptyWarning = document.createElement('label');
-                $(ccZipEmptyWarning).addClass('cc_zip_empty_warning warning');
-                $(ccZipEmptyWarning).text("Please enter card zip code.");
-                $(ccZipEmptyWarning).insertAfter($('#zip'));
-                $(ccZipEmptyWarning).show();
+                $('.cc_zip_empty_warning').show();
             }
         } else { $('.cc_zip_empty_warning').hide(); }
 
         if ($('#cvv').val() === "") { // credit card CVV should not be blank
             if (!($('.cc_cvv_empty_warning').is(':visible'))) {
-                let ccCVVEmptyWarning = document.createElement('label');
-                $(ccCVVEmptyWarning).addClass('cc_cvv_empty_warning warning');
-                $(ccCVVEmptyWarning).text("Please enter card CVV code.");
-                $(ccCVVEmptyWarning).insertAfter($('#cvv'));
-                $(ccCVVEmptyWarning).show();
+                $('.cc_cvv_empty_warning').show();
             }
         } else { $('.cc_cvv_empty_warning').hide(); }
+
     }
 
     // ON STARTUP
@@ -227,12 +204,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // focus on the first text field, "name"
     $('#name').focus();
 
+    // set a warning message for empty name in a new label, but hide message    
+    let nameWarning = document.createElement('label');
+    $(nameWarning).addClass('name_empty_warning warning');
+    $(nameWarning).text("Name field empty! Please enter a valid name.");
+    $(nameWarning).insertBefore($('#name'));
+    $(nameWarning).hide();
+
     // set a warning message for invalid email in a new label, but hide message
     let emailWarning = document.createElement('label');
     $(emailWarning).addClass('email_invalid_warning warning');
     $(emailWarning).text("Please enter a valid email address.");
     $(emailWarning).insertBefore($('#mail'));
     $(emailWarning).hide();
+
+    // set a warning message for empty email in a new label, but hide message
+    let mailEmptyWarning = document.createElement('label');
+    $(mailEmptyWarning).addClass('mail_empty_warning warning');
+    $(mailEmptyWarning).text("Email field empty! Please enter a valid email address.");
+    $(mailEmptyWarning).insertBefore($(emailWarning));
+    $(mailEmptyWarning).hide();
+
+    // set a warning message for empty activities checkboxes in a new label, but hide message
+    let noActivitiesSelectedWarning = document.createElement('p');
+    $(noActivitiesSelectedWarning).addClass('no_activities_selected_warning warning');
+    $(noActivitiesSelectedWarning).text("Please select at least one activity.");
+    $(noActivitiesSelectedWarning).insertAfter($('.activities'));
+    $(noActivitiesSelectedWarning).hide();
 
     // set a warning message for invalid credit card number in a new label, but hide message
     let ccNumWarning = document.createElement('label');
@@ -241,19 +239,40 @@ document.addEventListener('DOMContentLoaded', (event) => {
     $(ccNumWarning).insertAfter($('#cc-num'));
     $(ccNumWarning).hide();
 
-    // set a warning message for invalid credit card number in a new label, but hide message
+    // set a warning message for empty credit card number in a new label, but hide message
+    let ccNumEmptyWarning = document.createElement('label');
+    $(ccNumEmptyWarning).addClass('cc_num_empty_warning warning');
+    $(ccNumEmptyWarning).text("Please enter credit card number.");
+    $(ccNumEmptyWarning).insertAfter($('#cc-num'));
+    $(ccNumEmptyWarning).hide();
+
+    // set a warning message for invalid credit card zip in a new label, but hide message
     let ccZipWarning = document.createElement('label');
     $(ccZipWarning).addClass('cc_zip_invalid_warning warning');
     $(ccZipWarning).text("Please enter exactly 5 digits for zip.");
     $(ccZipWarning).insertAfter($('#zip'));
     $(ccZipWarning).hide();
 
-    // set a warning message for invalid credit card number in a new label, but hide message
+    // set a warning message for empty credit card zip in a new label, but hide message    
+    let ccZipEmptyWarning = document.createElement('label');
+    $(ccZipEmptyWarning).addClass('cc_zip_empty_warning warning');
+    $(ccZipEmptyWarning).text("Please enter card zip code.");
+    $(ccZipEmptyWarning).insertAfter($('#zip'));
+    $(ccZipEmptyWarning).hide();
+
+    // set a warning message for invalid credit card cvv in a new label, but hide message
     let ccCVVWarning = document.createElement('label');
     $(ccCVVWarning).addClass('cc_cvv_invalid_warning warning');
     $(ccCVVWarning).text("Please enter exactly 3 digits for CVV.");
     $(ccCVVWarning).insertAfter($('#cvv'));
     $(ccCVVWarning).hide();
+
+    // set a warning message for empty credit card cvv in a new label, but hide message    
+    let ccCVVEmptyWarning = document.createElement('label');
+    $(ccCVVEmptyWarning).addClass('cc_cvv_empty_warning warning');
+    $(ccCVVEmptyWarning).text("Please enter card CVV code.");
+    $(ccCVVEmptyWarning).insertAfter($('#cvv'));
+    $(ccCVVEmptyWarning).hide();
 
     // only display the color option if a selection is made in design drop down menu
     // hide the color selection area on page load
@@ -348,7 +367,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             activityTimes[i][1] = firstTime;
             activityTimes[i][2] = secondTime;
-
         }
     }
 
