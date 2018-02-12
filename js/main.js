@@ -161,6 +161,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (!creditCardValid()) { // if credit card selected as payment, credit card numbers are valid
             return false;
         }
+
+        // payment option should be selected
+        if ($('#payment').val() === 'select_method') {
+            return false;
+        }
         return true;
     }
 
@@ -189,6 +194,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 $('.no_activities_selected_warning').show();
             }
         } else { $('.no_activities_selected_warning').hide(); }
+
+        if ($('#payment').val() === 'select_method') { // no payment option selected
+            $('.no_payment_warning').show();
+        } else {
+            $('.no_payment_warning').hide();
+        }
 
         if ($('#cc-num').val() === "") { // credit card numbers should be added
             if (!($('.cc_num_empty_warning').is(':visible'))) {
@@ -257,6 +268,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // set a warning message for empty credit card cvv in a new label, but hide message    
     const ccCVVEmptyWarning = createMessage('label', 'cc_cvv_empty_warning',
         "Please enter card CVV code.", 'after', '#cvv');
+
+    // set a warning message if no payment option is selected in a new label, but hide message    
+    const noPaymentWarning = createMessage('label', 'no_payment_warning',
+        "Please select method of payment.", 'after', '#payment');
 
     // set a warning message for errors on submit button in a new label, but hide message        
     const invalidWarning = createMessage('label', 'invalid_warning',
@@ -473,6 +488,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
             $('.credit-card').hide();
             $('.bitcoin').hide();
             $('.paypal').show();
+        }
+
+        if (option.value === 'select_method') {
+            $('.credit-card').hide();
+            $('.bitcoin').hide();
+            $('.paypal').hide();
         }
     });
 
