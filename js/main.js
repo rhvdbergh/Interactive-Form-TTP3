@@ -226,6 +226,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // turn off HTML5 validation (so the validation is done with JavaScript)
     $('form').attr('novalidate', true);
 
+    // delete the other textarea and label
+    let textarea = document.getElementById('other-title');
+    let textareaLabel = document.getElementById('other-title-label');
+    textarea.parentNode.removeChild(textarea);
+    textareaLabel.parentNode.removeChild(textareaLabel);
+
     // focus on the first text field, "name"
     $('#name').focus();
 
