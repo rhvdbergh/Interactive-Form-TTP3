@@ -433,8 +433,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         } else { // a different option was selected, so remove the 
             //textarea box if it exists
             if (document.getElementById('other-title')) {
-                let textarea = document.getElementById('other-title')
+                let textarea = document.getElementById('other-title');
+                let textareaLabel = document.getElementById('other-title-label');
                 textarea.parentNode.removeChild(textarea);
+                textareaLabel.parentNode.removeChild(textareaLabel);
             }
         }
     });
